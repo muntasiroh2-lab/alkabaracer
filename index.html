@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Alkaba Racer - Goes to Space Restaurant</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #080A1A;
+            color: #FFFFFF;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+        }
+        .font-outfit {
+            font-family: 'Outfit', sans-serif;
+        }
+        /* Custom Neon Glow Effects */
+        .glow-cyan {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.6), inset 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+        .glow-pink {
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.6), inset 0 0 10px rgba(255, 0, 127, 0.4);
+        }
+        .glow-gold {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), inset 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        /* Screen Transitions */
+        .screen {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .screen-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.96);
+            display: none !important;
+        }
+        /* Keyframe Animations */
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.03); filter: brightness(1.2); }
+        }
+        .animate-pulse-glow {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: floatAnim 3s infinite ease-in-out;
+        }
+        /* Touch Keypad Button Styling */
+        .key-btn {
+            background: linear-gradient(180deg, #2A2E5D 0%, #171938 100%);
+            border: 1px solid #4A5199;
+            box-shadow: 0 3px 0 #0F1126;
+            transition: all 0.1s ease;
+        }
+        .key-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #0F1126;
+            background: #4A5199;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white relative">
+
+    <!-- Top Right Controls (Fullscreen & BGM Toggle) -->
+    <div class="fixed top-3 right-3 z-50 flex items-center gap-2">
+        <button id="bgmToggleBtn" onclick="toggleBGM()" class="p-3 bg-slate-900/80 hover:bg-slate-800 border border-cyan-500/50 rounded-2xl text-cyan-400 backdrop-blur-md shadow-lg transition active:scale-95 flex items-center justify-center min-w-[48px] min-h-[48px]" title="Audio Music">
+            <i class="fas fa-music text-lg" id="bgmIcon"></i>
+        </button>
+        <button onclick="toggleFullScreen()" class="p-3 bg-slate-900/80 hover:bg-slate-800 border border-yellow-500/50 rounded-2xl text-yellow-400 backdrop-blur-md shadow-lg transition active:scale-95 flex items-center justify-center min-w-[48px] min-h-[48px]" title="Full Screen">
+            <i class="fas fa-expand text-lg"></i>
+        </button>
+    </div>
+
+    <!-- SCREEN 1: MAIN MENU / START SCREEN -->
+    <div id="mainMenuScreen" class="screen flex flex-col items-center justify-between p-6 z-40 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/60 via-slate-950 to-slate-950">
+        <div class="flex-1 flex flex-col items-center justify-center text-center max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 text-sm font-semibold mb-4 animate-float">
+                <i class="fas fa-rocket text-yellow-400"></i> Grade 5 English Educational Learning Game
+            </div>
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold font-outfit tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-yellow-300 to-pink-500 drop-shadow-lg mb-2">
+                ALKABA RACER
+            </h1>
+            <p class="text-lg sm:text-2xl text-slate-300 font-semibold mb-6 tracking-wide">
+                🚀 Goes to Space Restaurant 🍔✨
+            </p>
+            <p class="text-sm sm:text-base text-slate-400 max-w-xl mb-8 leading-relaxed bg-slate-900/70 p-4 rounded-2xl border border-slate-800">
+                Race in <span class="text-cyan-400 font-bold">2-Player Mode</span>! Rockets, comets, and stars move at a smooth, constant speed. Collect word stars to answer English quizzes—the first astronaut to answer <span class="text-yellow-400 font-bold">15 questions correctly</span> reaches the Space Restaurant first!
+            </p>
+            <button onclick="goToCharacterSelect()" class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xl rounded-2xl shadow-lg glow-cyan transform hover:-translate-y-1 transition active:scale-95 flex items-center gap-3">
+                <i class="fas fa-play text-2xl"></i> START RACE (2 PLAYERS)
+            </button>
+        </div>
+        <div class="text-xs text-slate-500 text-center pb-2">
+            Grade 5 English Vocabulary • Topics: Food, Drink & Eating Tools
+        </div>
+    </div>
+
+    <!-- SCREEN 2: CHARACTER & ROCKET SELECTION SCREEN -->
+    <div id="charSelectScreen" class="screen screen-hidden flex flex-col p-4 sm:p-6 z-40 bg-slate-950 overflow-y-auto">
+        <div class="text-center mb-4 pt-2">
+            <h2 class="text-2xl sm:text-4xl font-bold font-outfit text-yellow-400">CHOOSE ASTRONAUT & ALKABA ROCKET</h2>
+            <p class="text-sm text-slate-400">Player 1 & Player 2, select your astronauts and rocket color schemes!</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto w-full my-auto">
+            <!-- PLAYER 1 SELECTION -->
+            <div class="bg-cyan-950/30 border-2 border-cyan-500/50 rounded-3xl p-5 flex flex-col justify-between backdrop-blur-md">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-sm">PLAYER 1 (LEFT)</span>
+                    <span class="text-xs text-cyan-300 font-semibold">Controls: W / S Keys or Touch</span>
+                </div>
+
+                <!-- Character Choice -->
+                <div class="mb-4">
+                    <label class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Select Astronaut:</label>
+                    <div class="grid grid-cols-3 gap-2" id="p1AstronautList"></div>
+                </div>
+
+                <!-- Rocket Choice -->
+                <div>
+                    <label class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Alkaba Rocket Color:</label>
+                    <div class="grid grid-cols-2 gap-2" id="p1RocketList"></div>
+                </div>
+            </div>
+
+            <!-- PLAYER 2 SELECTION -->
+            <div class="bg-pink-950/30 border-2 border-pink-500/50 rounded-3xl p-5 flex flex-col justify-between backdrop-blur-md">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="px-3 py-1 rounded-lg bg-pink-500 text-slate-950 font-bold text-sm">PLAYER 2 (RIGHT)</span>
+                    <span class="text-xs text-pink-300 font-semibold">Controls: Up / Down Arrows or Touch</span>
+                </div>
+
+                <!-- Character Choice -->
+                <div class="mb-4">
+                    <label class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Select Astronaut:</label>
+                    <div class="grid grid-cols-3 gap-2" id="p2AstronautList"></div>
+                </div>
+
+                <!-- Rocket Choice -->
+                <div>
+                    <label class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Alkaba Rocket Color:</label>
+                    <div class="grid grid-cols-2 gap-2" id="p2RocketList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center gap-4 mt-6 mb-2">
+            <button onclick="goToMainMenu()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl transition">
+                <i class="fas fa-arrow-left mr-2"></i> Back
+            </button>
+            <button onclick="startGame()" class="px-8 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-extrabold text-lg rounded-xl shadow-lg glow-gold active:scale-95 transition">
+                READY TO RACE! <i class="fas fa-flag-checkered ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: GAME RACE SCREEN (2-PLAYER SPLIT SCREEN) -->
+    <div id="raceScreen" class="screen screen-hidden flex flex-col h-full w-full bg-slate-950">
+        
+        <!-- Top Progress Header -->
+        <div class="h-12 bg-slate-900 border-b border-slate-800 px-4 flex items-center justify-between z-20 shrink-0">
+            <div class="flex items-center gap-2">
+                <span class="font-outfit font-extrabold text-cyan-400 text-sm sm:text-base">ALKABA RACER</span>
+            </div>
+            
+            <!-- Global Race Progress Bar -->
+            <div class="flex-1 max-w-md mx-4 bg-slate-950 h-5 rounded-full p-1 border border-slate-700 relative flex items-center">
+                <div class="text-[10px] absolute left-2 text-cyan-300 font-bold z-10">START (0/15)</div>
+                <div class="text-[10px] absolute right-2 text-yellow-300 font-bold z-10"><i class="fas fa-utensils"></i> GOAL: 15 CORRECT</div>
+                <div id="raceProgressBarP1" class="h-full bg-cyan-400/80 rounded-full transition-all duration-100" style="width: 0%"></div>
+                <div id="raceProgressBarP2" class="h-full bg-pink-500/80 rounded-full transition-all duration-100 absolute left-0" style="width: 0%"></div>
+            </div>
+
+            <div class="text-xs text-slate-400 hidden sm:block">First to 15 Correct Answers Wins</div>
+        </div>
+
+        <!-- Main Race Split-Screen Container -->
+        <div id="splitContainer" class="flex-1 flex flex-col md:flex-row relative overflow-hidden">
+            
+            <!-- PLAYER 1 LANE -->
+            <div id="laneP1" class="flex-1 flex flex-col relative border-b-2 md:border-b-0 md:border-r-2 border-slate-800 h-1/2 md:h-full">
+                <!-- P1 HUD Overlay -->
+                <div class="absolute top-2 left-2 right-2 z-10 flex justify-between items-center pointer-events-none">
+                    <div class="flex items-center gap-2 bg-slate-900/80 p-1.5 rounded-xl border border-cyan-500/40 backdrop-blur-md">
+                        <div id="p1HudAvatar" class="w-8 h-8 rounded-lg bg-cyan-950 flex items-center justify-center text-lg">🧑‍🚀</div>
+                        <div>
+                            <div id="p1HudName" class="text-xs font-bold text-cyan-300">P1: Patrick</div>
+                            <div class="text-[10px] text-slate-400">Score: <span id="p1ScoreText" class="text-yellow-400 font-bold">0</span> | Correct: <span id="p1CorrectText" class="text-cyan-300 font-bold">0/15</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-900/80 px-3 py-1.5 rounded-xl border border-cyan-500/40 backdrop-blur-md flex items-center gap-2">
+                        <i class="fas fa-gas-pump text-xs text-yellow-400"></i>
+                        <div class="w-20 sm:w-28 bg-slate-950 h-3 rounded-full border border-slate-700 overflow-hidden">
+                            <div id="p1FuelBar" class="h-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-400 transition-all" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <canvas id="canvasP1" class="w-full h-full block bg-slate-950"></canvas>
+
+                <!-- Touch Controls P1 -->
+                <div class="absolute bottom-2 left-2 z-10 flex flex-col gap-1.5 md:hidden pointer-events-auto">
+                    <button id="btnP1Up" class="w-12 h-12 rounded-2xl bg-cyan-600/80 active:bg-cyan-400 text-white font-bold text-xl flex items-center justify-center border border-cyan-300 shadow-md">▲</button>
+                    <button id="btnP1Down" class="w-12 h-12 rounded-2xl bg-cyan-600/80 active:bg-cyan-400 text-white font-bold text-xl flex items-center justify-center border border-cyan-300 shadow-md">▼</button>
+                </div>
+            </div>
+
+            <!-- PLAYER 2 LANE -->
+            <div id="laneP2" class="flex-1 flex flex-col relative h-1/2 md:h-full">
+                <!-- P2 HUD Overlay -->
+                <div class="absolute top-2 left-2 right-2 z-10 flex justify-between items-center pointer-events-none">
+                    <div class="flex items-center gap-2 bg-slate-900/80 p-1.5 rounded-xl border border-pink-500/40 backdrop-blur-md">
+                        <div id="p2HudAvatar" class="w-8 h-8 rounded-lg bg-pink-950 flex items-center justify-center text-lg">👩‍🚀</div>
+                        <div>
+                            <div id="p2HudName" class="text-xs font-bold text-pink-300">P2: Phoebe</div>
+                            <div class="text-[10px] text-slate-400">Score: <span id="p2ScoreText" class="text-yellow-400 font-bold">0</span> | Correct: <span id="p2CorrectText" class="text-pink-300 font-bold">0/15</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/80 px-3 py-1.5 rounded-xl border border-pink-500/40 backdrop-blur-md flex items-center gap-2">
+                        <i class="fas fa-gas-pump text-xs text-yellow-400"></i>
+                        <div class="w-20 sm:w-28 bg-slate-950 h-3 rounded-full border border-slate-700 overflow-hidden">
+                            <div id="p2FuelBar" class="h-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-400 transition-all" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <canvas id="canvasP2" class="w-full h-full block bg-slate-950"></canvas>
+
+                <!-- Touch Controls P2 -->
+                <div class="absolute bottom-2 right-2 z-10 flex flex-col gap-1.5 md:hidden pointer-events-auto">
+                    <button id="btnP2Up" class="w-12 h-12 rounded-2xl bg-pink-600/80 active:bg-pink-400 text-white font-bold text-xl flex items-center justify-center border border-pink-300 shadow-md">▲</button>
+                    <button id="btnP2Down" class="w-12 h-12 rounded-2xl bg-pink-600/80 active:bg-pink-400 text-white font-bold text-xl flex items-center justify-center border border-pink-300 shadow-md">▼</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POP-UP QUIZ MODAL (ENGLISH VOCAB) -->
+    <div id="quizModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
+        <div class="bg-slate-900 border-2 border-yellow-400/80 rounded-3xl p-5 sm:p-6 max-w-lg w-full shadow-2xl glow-gold flex flex-col items-center text-center animate-pulse-glow">
+            
+            <div id="quizPlayerBadge" class="px-4 py-1.5 rounded-full bg-cyan-500 text-slate-950 font-black text-sm mb-3 uppercase">
+                🌟 VOCAB STAR QUIZ: PLAYER 1
+            </div>
+
+            <div class="text-xs text-yellow-400 font-bold uppercase tracking-widest mb-1" id="quizCategoryText">
+                CATEGORY: FOOD
+            </div>
+
+            <div class="w-28 h-28 sm:w-36 sm:h-36 bg-slate-950 border-2 border-slate-700 rounded-2xl flex items-center justify-center my-2 shadow-inner text-6xl sm:text-7xl" id="quizImageContainer">
+                🍎
+            </div>
+
+            <p class="text-sm sm:text-base text-slate-300 mb-2 font-medium">What is the English word for this item?</p>
+            <div class="text-xs text-slate-400 mb-4 bg-slate-800/80 px-3 py-1 rounded-lg" id="quizHintText">
+                Hint: Spoon
+            </div>
+
+            <div class="w-full mb-3">
+                <input type="text" id="quizInput" autocomplete="off" placeholder="Type answer..." class="w-full text-center text-xl font-bold py-3 px-4 rounded-xl bg-slate-950 border-2 border-yellow-400 text-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-300 uppercase tracking-widest" readonly>
+            </div>
+
+            <div class="w-full max-w-sm mb-4">
+                <div id="virtualKeyboard" class="flex flex-wrap justify-center gap-1"></div>
+            </div>
+
+            <div class="flex gap-2 w-full">
+                <button onclick="clearQuizInput()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl transition text-sm">
+                    <i class="fas fa-backspace mr-1"></i> CLEAR
+                </button>
+                <button onclick="submitQuizAnswer()" class="flex-2 w-2/3 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-black rounded-xl transition text-base shadow-lg active:scale-95">
+                    SUBMIT & BOOST! <i class="fas fa-bolt ml-1"></i>
+                </button>
+            </div>
+            
+            <div id="quizFeedback" class="mt-2 text-sm font-bold h-5"></div>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: VICTORY & SPACE RESTAURANT SCREEN -->
+    <div id="victoryScreen" class="screen screen-hidden flex flex-col items-center justify-between p-6 z-40 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/80 via-slate-950 to-slate-950">
+        
+        <canvas id="victoryCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+        <div class="z-10 text-center max-w-2xl w-full my-auto flex flex-col items-center">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-500/20 border border-yellow-400/50 text-yellow-300 text-sm font-bold mb-3 animate-float">
+                <i class="fas fa-trophy"></i> ARRIVED AT COSMIC CAFE!
+            </div>
+
+            <h2 id="winnerTitle" class="text-3xl sm:text-5xl font-black font-outfit text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-300 mb-2">
+                PLAYER 1 WINS!
+            </h2>
+
+            <div class="relative bg-slate-900/80 border-2 border-purple-500/50 rounded-3xl p-6 my-4 w-full backdrop-blur-md flex flex-col items-center shadow-2xl">
+                <div class="text-7xl mb-2 animate-bounce">🤖</div>
+                <div class="text-cyan-300 font-bold text-lg mb-1">Cosmic Cafe Multi-Armed Robot Server</div>
+                <p class="text-sm text-slate-300 max-w-md italic mb-4">
+                    "Welcome space explorers! Enjoy these cosmic treats and a marvelous fireworks show!"
+                </p>
+
+                <div class="flex justify-center gap-4 text-3xl py-2 px-6 bg-slate-950/80 rounded-2xl border border-slate-800">
+                    <span>🍕</span><span>🍔</span><span>🍰</span><span>🧃</span><span>🍓</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 w-full mt-6 text-left">
+                    <div class="bg-cyan-950/50 p-3 rounded-xl border border-cyan-500/40">
+                        <div class="text-xs text-cyan-300 font-bold" id="p1VictoryName">P1: Patrick</div>
+                        <div class="text-xl font-black text-yellow-400" id="p1VictoryScore">0 Points</div>
+                    </div>
+                    <div class="bg-pink-950/50 p-3 rounded-xl border border-pink-500/40">
+                        <div class="text-xs text-pink-300 font-bold" id="p2VictoryName">P2: Phoebe</div>
+                        <div class="text-xl font-black text-yellow-400" id="p2VictoryScore">0 Points</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="goToCharacterSelect()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                    <i class="fas fa-users mr-2"></i> Change Characters
+                </button>
+                <button onclick="startGame()" class="px-8 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-lg rounded-xl shadow-lg glow-cyan active:scale-95 transition">
+                    PLAY AGAIN! <i class="fas fa-redo ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* GAME DATA DEFINITIONS */
+        const ASTRONAUTS = [
+            { id: 'patrick', name: 'Patrick', emoji: '🧑‍🚀', color: '#00F0FF', suitColor: '#00D2FF', avatarBg: 'bg-cyan-950' },
+            { id: 'phoebe', name: 'Phoebe', emoji: '👩‍🚀', color: '#FF007F', suitColor: '#FF3399', avatarBg: 'bg-pink-950' },
+            { id: 'alex', name: 'Alex', emoji: '🚀', color: '#FFD700', suitColor: '#FFB700', avatarBg: 'bg-amber-950' }
+        ];
+
+        const ROCKET_COLORS = [
+            { id: 'red', name: 'Red Fireburst', primary: '#FF3333', secondary: '#FF8800', glow: '#FF0055' },
+            { id: 'blue', name: 'Blue Cosmic', primary: '#00CCFF', secondary: '#0033FF', glow: '#00FFFF' },
+            { id: 'gold', name: 'Golden Flare', primary: '#FFD700', secondary: '#FF6600', glow: '#FFFF00' },
+            { id: 'green', name: 'Neon Emerald', primary: '#00FF66', secondary: '#009933', glow: '#00FFCC' }
+        ];
+
+        const VOCAB_DATA = [
+            // Food
+            { word: 'STRAWBERRY', cat: 'FOOD', hint: 'A sweet red fruit with tiny seeds on the outside', icon: '🍓' },
+            { word: 'BISCUIT', cat: 'FOOD', hint: 'A small baked crunchy crisp snack or cookie', icon: '🍪' },
+            { word: 'PEPPER', cat: 'FOOD', hint: 'A spice or vegetable used to make food spicy', icon: '🌶️' },
+            { word: 'SALT', cat: 'FOOD', hint: 'White mineral seasoning used for savory food', icon: '🧂' },
+            { word: 'PIZZA', cat: 'FOOD', hint: 'Italian flat baked dough with cheese & toppings', icon: '🍕' },
+            { word: 'CAKE', cat: 'FOOD', hint: 'Sweet baked dessert eaten at birthdays', icon: '🍰' },
+            { word: 'BURGER', cat: 'FOOD', hint: 'Patty served inside a sliced bread bun', icon: '🍔' },
+            { word: 'SALAD', cat: 'FOOD', hint: 'A healthy dish made of mixed fresh vegetables', icon: '🥗' },
+            { word: 'NOODLE', cat: 'FOOD', hint: 'Long thin strips of pasta or boiled dough', icon: '🍜' },
+            // Drink
+            { word: 'WATER', cat: 'DRINK', hint: 'Clear liquid essential for life', icon: '💧' },
+            { word: 'JUICE', cat: 'DRINK', hint: 'Sweet drink squeezed from fresh fruit', icon: '🧃' },
+            { word: 'TEA', cat: 'DRINK', hint: 'Hot or cold drink brewed from steeped leaves', icon: '🍵' },
+            { word: 'MILK', cat: 'DRINK', hint: 'Nutritious white liquid produced by cows', icon: '🥛' },
+            { word: 'COFFEE', cat: 'DRINK', hint: 'Dark warm roasted beverage that gives energy', icon: '☕' },
+            // Eating Tool
+            { word: 'SPOON', cat: 'EATING TOOL', hint: 'Utensil with a curved bowl for eating soup', icon: '🥄' },
+            { word: 'FORK', cat: 'EATING TOOL', hint: 'Utensil with prongs used to spear food', icon: '🍴' },
+            { word: 'NAPKIN', cat: 'EATING TOOL', hint: 'Piece of cloth or paper used to wipe hands/face', icon: '🧻' },
+            { word: 'CHOPSTICKS', cat: 'EATING TOOL', hint: 'Pair of thin sticks used to eat Asian cuisine', icon: '🥢' },
+            { word: 'CUP', cat: 'EATING TOOL', hint: 'Small container with handle used for drinking', icon: '☕' },
+            { word: 'KNIFE', cat: 'EATING TOOL', hint: 'Utensil with a sharp blade used for cutting', icon: '🔪' },
+            { word: 'BOWL', cat: 'EATING TOOL', hint: 'Round deep dish used for holding soup or rice', icon: '🥣' }
+        ];
+
+        /* TARGET GAME SETTINGS */
+        const TARGET_CORRECT_ANSWERS = 15;
+        const CONSTANT_SCROLL_SPEED = 3.5;
+
+        /* STATE MANAGEMENT */
+        let state = {
+            screen: "mainMenu", 
+            p1: {
+                astronaut: ASTRONAUTS[0],
+                rocket: ROCKET_COLORS[0],
+                x: 80,
+                y: 150,
+                score: 0,
+                correctAnswers: 0,
+                fuel: 100,
+                slowTimer: 0,
+                boostTimer: 0
+            },
+            p2: {
+                astronaut: ASTRONAUTS[1],
+                rocket: ROCKET_COLORS[1],
+                x: 80,
+                y: 150,
+                score: 0,
+                correctAnswers: 0,
+                fuel: 100,
+                slowTimer: 0,
+                boostTimer: 0
+            },
+            activeQuizPlayer: null,
+            currentQuizItem: null,
+            quizInputValue: "",
+            quizActive: false,
+            quizSubmitting: false,
+            gameRunning: false
+        };
+
+        let keysPressed = {};
+        let canvasP1, ctxP1, canvasP2, ctxP2, victoryCanvas, victoryCtx;
+        let p1Stars = [], p1Comets = [], p2Stars = [], p2Comets = [];
+        let bgStarfield = [];
+        let fireworks = [];
+
+        /* AUDIO SYNTHESIZER (Web Audio API) */
+        let audioCtx = null;
+        let bgmOsc = null;
+        let isBgmPlaying = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playCorrectSound() {
+            if (!audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.3); // C6
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch (e) {}
+        }
+
+        function playCometSound() {
+            if (!audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } catch (e) {}
+        }
+
+        function toggleBGM() {
+            initAudio();
+            const btnIcon = document.getElementById('bgmIcon');
+            if (isBgmPlaying) {
+                if (bgmOsc) bgmOsc.stop();
+                isBgmPlaying = false;
+                btnIcon.className = "fas fa-music text-lg opacity-50";
+            } else {
+                startBgmLoop();
+                isBgmPlaying = true;
+                btnIcon.className = "fas fa-music text-lg text-cyan-400 animate-pulse";
+            }
+        }
+
+        function startBgmLoop() {
+            if (!audioCtx) return;
+            try {
+                bgmOsc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                bgmOsc.type = 'triangle';
+                bgmOsc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                gain.gain.value = 0.05;
+                bgmOsc.connect(gain);
+                gain.connect(audioCtx.destination);
+                bgmOsc.start();
+            } catch (e) {}
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('screen-hidden'));
+            const target = document.getElementById(screenId);
+            if (target) target.classList.remove('screen-hidden');
+            state.screen = screenId;
+        }
+
+        function goToMainMenu() {
+            showScreen('mainMenuScreen');
+        }
+
+        function goToCharacterSelect() {
+            renderCharacterLists();
+            showScreen('charSelectScreen');
+        }
+
+        function renderCharacterLists() {
+            const p1AstList = document.getElementById('p1AstronautList');
+            const p2AstList = document.getElementById('p2AstronautList');
+            const p1RocList = document.getElementById('p1RocketList');
+            const p2RocList = document.getElementById('p2RocketList');
+
+            p1AstList.innerHTML = '';
+            p2AstList.innerHTML = '';
+            p1RocList.innerHTML = '';
+            p2RocList.innerHTML = '';
+
+            ASTRONAUTS.forEach((ast) => {
+                // P1
+                let btn1 = document.createElement('button');
+                btn1.className = `p-2 rounded-2xl border flex flex-col items-center justify-center transition ${state.p1.astronaut.id === ast.id ? 'border-cyan-400 bg-cyan-900/60 ring-2 ring-cyan-400' : 'border-slate-800 bg-slate-900/60'}`;
+                btn1.innerHTML = `<span class="text-3xl mb-1">${ast.emoji}</span><span class="text-xs font-bold text-slate-200">${ast.name}</span>`;
+                btn1.onclick = () => { state.p1.astronaut = ast; renderCharacterLists(); };
+                p1AstList.appendChild(btn1);
+
+                // P2
+                let btn2 = document.createElement('button');
+                btn2.className = `p-2 rounded-2xl border flex flex-col items-center justify-center transition ${state.p2.astronaut.id === ast.id ? 'border-pink-400 bg-pink-900/60 ring-2 ring-pink-400' : 'border-slate-800 bg-slate-900/60'}`;
+                btn2.innerHTML = `<span class="text-3xl mb-1">${ast.emoji}</span><span class="text-xs font-bold text-slate-200">${ast.name}</span>`;
+                btn2.onclick = () => { state.p2.astronaut = ast; renderCharacterLists(); };
+                p2AstList.appendChild(btn2);
+            });
+
+            ROCKET_COLORS.forEach((roc) => {
+                // P1 Rocket
+                let rBtn1 = document.createElement('button');
+                rBtn1.className = `p-2.5 rounded-xl border flex items-center gap-2 transition ${state.p1.rocket.id === roc.id ? 'border-cyan-400 bg-cyan-900/60 ring-2 ring-cyan-400' : 'border-slate-800 bg-slate-900/60'}`;
+                rBtn1.innerHTML = `<div class="w-4 h-4 rounded-full" style="background: ${roc.primary}"></div><span class="text-xs font-bold text-slate-200">${roc.name}</span>`;
+                rBtn1.onclick = () => { state.p1.rocket = roc; renderCharacterLists(); };
+                p1RocList.appendChild(rBtn1);
+
+                // P2 Rocket
+                let rBtn2 = document.createElement('button');
+                rBtn2.className = `p-2.5 rounded-xl border flex items-center gap-2 transition ${state.p2.rocket.id === roc.id ? 'border-pink-400 bg-pink-900/60 ring-2 ring-pink-400' : 'border-slate-800 bg-slate-900/60'}`;
+                rBtn2.innerHTML = `<div class="w-4 h-4 rounded-full" style="background: ${roc.primary}"></div><span class="text-xs font-bold text-slate-200">${roc.name}</span>`;
+                rBtn2.onclick = () => { state.p2.rocket = roc; renderCharacterLists(); };
+                p2RocList.appendChild(rBtn2);
+            });
+        }
+
+        function startGame() {
+            state.p1.score = 0;
+            state.p1.correctAnswers = 0;
+            state.p1.fuel = 100;
+            state.p1.y = 120;
+
+            state.p2.score = 0;
+            state.p2.correctAnswers = 0;
+            state.p2.fuel = 100;
+            state.p2.y = 120;
+
+            state.activeQuizPlayer = null;
+            state.quizActive = false;
+            state.quizSubmitting = false;
+
+            p1Stars = spawnEntities('star', 5);
+            p1Comets = spawnEntities('comet', 4);
+            p2Stars = spawnEntities('star', 5);
+            p2Comets = spawnEntities('comet', 4);
+
+            document.getElementById('p1HudName').innerText = `P1: ${state.p1.astronaut.name}`;
+            document.getElementById('p1HudAvatar').innerText = state.p1.astronaut.emoji;
+            document.getElementById('p2HudName').innerText = `P2: ${state.p2.astronaut.name}`;
+            document.getElementById('p2HudAvatar').innerText = state.p2.astronaut.emoji;
+
+            showScreen('raceScreen');
+            setTimeout(setupCanvas, 100);
+            state.gameRunning = true;
+            initAudio();
+        }
+
+        function setupCanvas() {
+            canvasP1 = document.getElementById('canvasP1');
+            canvasP2 = document.getElementById('canvasP2');
+            victoryCanvas = document.getElementById('victoryCanvas');
+
+            if (canvasP1 && canvasP2) {
+                const lane1 = document.getElementById('laneP1');
+                const lane2 = document.getElementById('laneP2');
+                
+                canvasP1.width = lane1.clientWidth;
+                canvasP1.height = lane1.clientHeight;
+                canvasP2.width = lane2.clientWidth;
+                canvasP2.height = lane2.clientHeight;
+
+                ctxP1 = canvasP1.getContext('2d');
+                ctxP2 = canvasP2.getContext('2d');
+            }
+
+            if (victoryCanvas) {
+                victoryCanvas.width = window.innerWidth;
+                victoryCanvas.height = window.innerHeight;
+                victoryCtx = victoryCanvas.getContext('2d');
+            }
+
+            bgStarfield = [];
+            for (let i = 0; i < 80; i++) {
+                bgStarfield.push({
+                    x: Math.random() * 1000,
+                    y: Math.random() * 800,
+                    size: Math.random() * 2 + 1
+                });
+            }
+        }
+
+        window.addEventListener('resize', setupCanvas);
+
+        function spawnEntities(type, count) {
+            let list = [];
+            for (let i = 0; i < count; i++) {
+                list.push({
+                    x: 600 + i * 320 + Math.random() * 100,
+                    y: 40 + Math.random() * 180,
+                    size: type === 'star' ? 24 : 28,
+                    speed: CONSTANT_SCROLL_SPEED
+                });
+            }
+            return list;
+        }
+
+        function updateGamePhysics() {
+            // --- PLAYER 1 PHYSICS ---
+            if (!state.quizActive) {
+                if (keysPressed['KeyW']) state.p1.y -= 5;
+                if (keysPressed['KeyS']) state.p1.y += 5;
+                state.p1.y = Math.max(30, Math.min(canvasP1.height - 30, state.p1.y));
+
+                let speedP1 = CONSTANT_SCROLL_SPEED;
+                if (state.p1.slowTimer > 0) { speedP1 *= 0.5; state.p1.slowTimer--; }
+                if (state.p1.boostTimer > 0) { speedP1 *= 1.5; state.p1.boostTimer--; }
+
+                state.p1.fuel = Math.max(0, state.p1.fuel - 0.02);
+
+                p1Stars.forEach(s => {
+                    s.x -= speedP1;
+                    if (s.x < -30) {
+                        s.x = canvasP1.width + Math.random() * 200 + 100;
+                        s.y = 40 + Math.random() * (canvasP1.height - 80);
+                    }
+                    if (!state.quizActive && checkCollision({x: state.p1.x, y: state.p1.y, size: 25}, s)) {
+                        // Relocate star off screen and trigger exactly 1 quiz popup
+                        s.x = canvasP1.width + 300 + Math.random() * 200;
+                        s.y = 40 + Math.random() * (canvasP1.height - 80);
+                        triggerVocabQuiz(1);
+                    }
+                });
+
+                p1Comets.forEach(c => {
+                    c.x -= speedP1 + 0.5;
+                    if (c.x < -30) {
+                        c.x = canvasP1.width + Math.random() * 300 + 100;
+                        c.y = 40 + Math.random() * (canvasP1.height - 80);
+                    }
+                    if (checkCollision({x: state.p1.x, y: state.p1.y, size: 25}, c)) {
+                        c.x = canvasP1.width + Math.random() * 300 + 100;
+                        state.p1.score = Math.max(0, state.p1.score - 50);
+                        state.p1.fuel = Math.max(0, state.p1.fuel - 15);
+                        state.p1.slowTimer = 60;
+                        playCometSound();
+                    }
+                });
+            }
+
+            // --- PLAYER 2 PHYSICS ---
+            if (!state.quizActive) {
+                if (keysPressed['ArrowUp']) state.p2.y -= 5;
+                if (keysPressed['ArrowDown']) state.p2.y += 5;
+                state.p2.y = Math.max(30, Math.min(canvasP2.height - 30, state.p2.y));
+
+                let speedP2 = CONSTANT_SCROLL_SPEED;
+                if (state.p2.slowTimer > 0) { speedP2 *= 0.5; state.p2.slowTimer--; }
+                if (state.p2.boostTimer > 0) { speedP2 *= 1.5; state.p2.boostTimer--; }
+
+                state.p2.fuel = Math.max(0, state.p2.fuel - 0.02);
+
+                p2Stars.forEach(s => {
+                    s.x -= speedP2;
+                    if (s.x < -30) {
+                        s.x = canvasP2.width + Math.random() * 200 + 100;
+                        s.y = 40 + Math.random() * (canvasP2.height - 80);
+                    }
+                    if (!state.quizActive && checkCollision({x: state.p2.x, y: state.p2.y, size: 25}, s)) {
+                        // Relocate star off screen and trigger exactly 1 quiz popup
+                        s.x = canvasP2.width + 300 + Math.random() * 200;
+                        s.y = 40 + Math.random() * (canvasP2.height - 80);
+                        triggerVocabQuiz(2);
+                    }
+                });
+
+                p2Comets.forEach(c => {
+                    c.x -= speedP2 + 0.5;
+                    if (c.x < -30) {
+                        c.x = canvasP2.width + Math.random() * 300 + 100;
+                        c.y = 40 + Math.random() * (canvasP2.height - 80);
+                    }
+                    if (checkCollision({x: state.p2.x, y: state.p2.y, size: 25}, c)) {
+                        c.x = canvasP2.width + Math.random() * 300 + 100;
+                        state.p2.score = Math.max(0, state.p2.score - 50);
+                        state.p2.fuel = Math.max(0, state.p2.fuel - 15);
+                        state.p2.slowTimer = 60;
+                        playCometSound();
+                    }
+                });
+            }
+
+            // HUD update
+            document.getElementById('p1ScoreText').innerText = state.p1.score;
+            document.getElementById('p2ScoreText').innerText = state.p2.score;
+            document.getElementById('p1CorrectText').innerText = `${state.p1.correctAnswers}/${TARGET_CORRECT_ANSWERS}`;
+            document.getElementById('p2CorrectText').innerText = `${state.p2.correctAnswers}/${TARGET_CORRECT_ANSWERS}`;
+            document.getElementById('p1FuelBar').style.width = `${state.p1.fuel}%`;
+            document.getElementById('p2FuelBar').style.width = `${state.p2.fuel}%`;
+
+            const p1Pct = Math.min(100, (state.p1.correctAnswers / TARGET_CORRECT_ANSWERS) * 100);
+            const p2Pct = Math.min(100, (state.p2.correctAnswers / TARGET_CORRECT_ANSWERS) * 100);
+            document.getElementById('raceProgressBarP1').style.width = `${p1Pct}%`;
+            document.getElementById('raceProgressBarP2').style.width = `${p2Pct}%`;
+
+            // Check Win condition (15 Correct Answers)
+            if (state.p1.correctAnswers >= TARGET_CORRECT_ANSWERS || state.p2.correctAnswers >= TARGET_CORRECT_ANSWERS) {
+                triggerVictory();
+            }
+        }
+
+        function checkCollision(a, b) {
+            let dx = a.x - b.x;
+            let dy = a.y - b.y;
+            return Math.sqrt(dx * dx + dy * dy) < (a.size + b.size / 2);
+        }
+
+        function gameLoop() {
+            if (state.gameRunning && state.screen === 'raceScreen') {
+                updateGamePhysics();
+                drawSpaceLane(ctxP1, canvasP1, state.p1, p1Stars, p1Comets);
+                drawSpaceLane(ctxP2, canvasP2, state.p2, p2Stars, p2Comets);
+            } else if (state.screen === 'victoryScreen') {
+                renderVictoryAnimation();
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        function drawSpaceLane(ctx, canvas, pData, stars, comets) {
+            if (!ctx || !canvas) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Background Stars
+            ctx.fillStyle = "#FFFFFF";
+            bgStarfield.forEach(st => {
+                st.x -= CONSTANT_SCROLL_SPEED * 0.3;
+                if (st.x < 0) st.x = canvas.width;
+                ctx.globalAlpha = Math.random() * 0.5 + 0.3;
+                ctx.fillRect(st.x, st.y % canvas.height, st.size, st.size);
+            });
+            ctx.globalAlpha = 1.0;
+
+            // Draw Stars (Powerups)
+            stars.forEach(s => {
+                ctx.font = `${s.size}px sans-serif`;
+                ctx.fillText("⭐", s.x, s.y);
+            });
+
+            // Draw Comets (Obstacles)
+            comets.forEach(c => {
+                ctx.font = `${c.size}px sans-serif`;
+                ctx.fillText("☄️", c.x, c.y);
+            });
+
+            // Draw Rocket ALKABA
+            drawRocket(ctx, pData.x, pData.y, pData.rocket, pData.astronaut, pData.slowTimer > 0);
+        }
+
+        function drawRocket(ctx, x, y, rocketColor, astronaut, isSlowed) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            if (isSlowed) {
+                ctx.shadowColor = '#FF0000';
+                ctx.shadowBlur = 15;
+            } else {
+                ctx.shadowColor = rocketColor.glow;
+                ctx.shadowBlur = 10;
+            }
+
+            // Rocket Body
+            ctx.fillStyle = rocketColor.primary;
+            ctx.beginPath();
+            ctx.moveTo(30, 0);
+            ctx.quadraticCurveTo(0, -18, -30, -15);
+            ctx.lineTo(-30, 15);
+            ctx.quadraticCurveTo(0, 18, 30, 0);
+            ctx.fill();
+
+            // Rocket Wings
+            ctx.fillStyle = rocketColor.secondary;
+            ctx.beginPath();
+            ctx.moveTo(-10, -15);
+            ctx.lineTo(-25, -30);
+            ctx.lineTo(-25, -12);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(-10, 15);
+            ctx.lineTo(-25, 30);
+            ctx.lineTo(-25, 12);
+            ctx.fill();
+
+            // Astronaut Cockpit Window
+            ctx.fillStyle = "#00F0FF";
+            ctx.beginPath();
+            ctx.arc(5, 0, 9, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.font = "12px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(astronaut.emoji, 5, 0);
+
+            // Exhaust Thruster Flame
+            ctx.fillStyle = isSlowed ? "#FF4400" : "#FFCC00";
+            ctx.beginPath();
+            ctx.moveTo(-30, -8);
+            ctx.lineTo(-45 - Math.random() * 10, 0);
+            ctx.lineTo(-30, 8);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function triggerVocabQuiz(playerNum) {
+            if (state.quizActive) return; // Prevent duplicate popup triggers
+            state.quizActive = true;
+            state.quizSubmitting = false;
+
+            state.activeQuizPlayer = playerNum;
+            const item = VOCAB_DATA[Math.floor(Math.random() * VOCAB_DATA.length)];
+            state.currentQuizItem = item;
+            state.quizInputValue = "";
+
+            const badge = document.getElementById('quizPlayerBadge');
+            if (playerNum === 1) {
+                badge.className = "px-4 py-1.5 rounded-full bg-cyan-500 text-slate-950 font-black text-sm mb-3 uppercase";
+                badge.innerText = `🌟 VOCAB STAR QUIZ: PLAYER 1 (${state.p1.astronaut.name})`;
+            } else {
+                badge.className = "px-4 py-1.5 rounded-full bg-pink-500 text-slate-950 font-black text-sm mb-3 uppercase";
+                badge.innerText = `🌟 VOCAB STAR QUIZ: PLAYER 2 (${state.p2.astronaut.name})`;
+            }
+
+            document.getElementById('quizCategoryText').innerText = `CATEGORY: ${item.cat}`;
+            document.getElementById('quizImageContainer').innerText = item.icon;
+            document.getElementById('quizHintText').innerText = `Hint: ${item.hint}`;
+            document.getElementById('quizInput').value = "";
+            document.getElementById('quizFeedback').innerText = "";
+
+            renderVirtualKeyboard();
+            document.getElementById('quizModal').style.display = 'flex';
+        }
+
+        function renderVirtualKeyboard() {
+            const container = document.getElementById('virtualKeyboard');
+            container.innerHTML = '';
+            const letters = "QWERTYUIOPASDFGHJKLZXCVBNM".split('');
+
+            letters.forEach(lettr => {
+                let btn = document.createElement('button');
+                btn.className = "key-btn text-white font-bold w-7 h-9 sm:w-8 sm:h-10 rounded-lg text-sm sm:text-base flex items-center justify-center";
+                btn.innerText = lettr;
+                btn.onclick = () => {
+                    if (state.quizSubmitting) return;
+                    state.quizInputValue += lettr;
+                    document.getElementById('quizInput').value = state.quizInputValue;
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function clearQuizInput() {
+            if (state.quizSubmitting) return;
+            state.quizInputValue = "";
+            document.getElementById('quizInput').value = "";
+        }
+
+        function submitQuizAnswer() {
+            if (!state.currentQuizItem || state.quizSubmitting) return;
+            state.quizSubmitting = true;
+
+            const inputTrimmed = state.quizInputValue.trim().toUpperCase();
+            const correctWord = state.currentQuizItem.word.toUpperCase();
+
+            if (inputTrimmed === correctWord) {
+                playCorrectSound();
+                document.getElementById('quizFeedback').className = "mt-2 text-sm font-bold text-green-400";
+
+                if (state.activeQuizPlayer === 1) {
+                    state.p1.correctAnswers += 1;
+                    state.p1.fuel = 100;
+                    state.p1.score += 100;
+                    state.p1.boostTimer = 120;
+                    document.getElementById('quizFeedback').innerText = `CORRECT! (${state.p1.correctAnswers}/${TARGET_CORRECT_ANSWERS}) +FUEL & SPEED BOOST!`;
+                } else {
+                    state.p2.correctAnswers += 1;
+                    state.p2.fuel = 100;
+                    state.p2.score += 100;
+                    state.p2.boostTimer = 120;
+                    document.getElementById('quizFeedback').innerText = `CORRECT! (${state.p2.correctAnswers}/${TARGET_CORRECT_ANSWERS}) +FUEL & SPEED BOOST!`;
+                }
+
+                setTimeout(() => {
+                    document.getElementById('quizModal').style.display = 'none';
+                    state.quizActive = false;
+                    state.quizSubmitting = false;
+                }, 800);
+            } else {
+                playCometSound();
+                document.getElementById('quizFeedback').className = "mt-2 text-sm font-bold text-red-400";
+                document.getElementById('quizFeedback').innerText = `INCORRECT! Correct Answer: ${correctWord}`;
+
+                setTimeout(() => {
+                    document.getElementById('quizModal').style.display = 'none';
+                    state.quizActive = false;
+                    state.quizSubmitting = false;
+                }, 1400);
+            }
+        }
+
+        function triggerVictory() {
+            state.gameRunning = false;
+            let winnerText = "";
+
+            if (state.p1.correctAnswers >= TARGET_CORRECT_ANSWERS && state.p2.correctAnswers >= TARGET_CORRECT_ANSWERS) {
+                winnerText = "TIE GAME! BOTH REACHED 15 CORRECT ANSWERS!";
+            } else if (state.p1.correctAnswers >= TARGET_CORRECT_ANSWERS) {
+                winnerText = `🏆 PLAYER 1 (${state.p1.astronaut.name}) WINS! (15/15 Correct)`;
+            } else {
+                winnerText = `🏆 PLAYER 2 (${state.p2.astronaut.name}) WINS! (15/15 Correct)`;
+            }
+
+            document.getElementById('winnerTitle').innerText = winnerText;
+            document.getElementById('p1VictoryName').innerText = `P1: ${state.p1.astronaut.name}`;
+            document.getElementById('p1VictoryScore').innerText = `${state.p1.score} Pts (${state.p1.correctAnswers}/15 Correct)`;
+            document.getElementById('p2VictoryName').innerText = `P2: ${state.p2.astronaut.name}`;
+            document.getElementById('p2VictoryScore').innerText = `${state.p2.score} Pts (${state.p2.correctAnswers}/15 Correct)`;
+
+            fireworks = [];
+            for (let i = 0; i < 35; i++) {
+                fireworks.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                    radius: Math.random() * 4 + 2,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6
+                });
+            }
+
+            showScreen('victoryScreen');
+        }
+
+        function renderVictoryAnimation() {
+            if (!victoryCtx) return;
+            victoryCtx.clearRect(0, 0, victoryCanvas.width, victoryCanvas.height);
+
+            fireworks.forEach(fw => {
+                fw.x += fw.vx;
+                fw.y += fw.vy;
+                if (fw.x < 0 || fw.x > victoryCanvas.width) fw.vx *= -1;
+                if (fw.y < 0 || fw.y > victoryCanvas.height) fw.vy *= -1;
+
+                victoryCtx.beginPath();
+                victoryCtx.arc(fw.x, fw.y, fw.radius, 0, Math.PI * 2);
+                victoryCtx.fillStyle = fw.color;
+                victoryCtx.fill();
+            });
+        }
+
+        /* KEYBOARD & TOUCH CONTROLS LISTENERS */
+        window.addEventListener('keydown', e => {
+            keysPressed[e.code] = true;
+            if (document.getElementById('quizModal').style.display !== 'none') {
+                if (e.key === 'Backspace') {
+                    clearQuizInput();
+                } else if (e.key === 'Enter') {
+                    submitQuizAnswer();
+                } else if (e.key.length === 1 && e.key.match(/[a-z]/i)) {
+                    state.quizInputValue += e.key.toUpperCase();
+                    document.getElementById('quizInput').value = state.quizInputValue;
+                }
+            }
+        });
+
+        window.addEventListener('keyup', e => {
+            keysPressed[e.code] = false;
+        });
+
+        // Touch button listeners
+        document.getElementById('btnP1Up').addEventListener('touchstart', (e) => { e.preventDefault(); keysPressed['KeyW'] = true; });
+        document.getElementById('btnP1Up').addEventListener('touchend', (e) => { e.preventDefault(); keysPressed['KeyW'] = false; });
+        document.getElementById('btnP1Down').addEventListener('touchstart', (e) => { e.preventDefault(); keysPressed['KeyS'] = true; });
+        document.getElementById('btnP1Down').addEventListener('touchend', (e) => { e.preventDefault(); keysPressed['KeyS'] = false; });
+
+        document.getElementById('btnP2Up').addEventListener('touchstart', (e) => { e.preventDefault(); keysPressed['ArrowUp'] = true; });
+        document.getElementById('btnP2Up').addEventListener('touchend', (e) => { e.preventDefault(); keysPressed['ArrowUp'] = false; });
+        document.getElementById('btnP2Down').addEventListener('touchstart', (e) => { e.preventDefault(); keysPressed['ArrowDown'] = true; });
+        document.getElementById('btnP2Down').addEventListener('touchend', (e) => { e.preventDefault(); keysPressed['ArrowDown'] = false; });
+
+        // On window load
+        window.onload = function() {
+            renderCharacterLists();
+            gameLoop();
+        };
+    </script>
+</body>
+</html>
